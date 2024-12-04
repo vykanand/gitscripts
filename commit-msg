@@ -13,5 +13,6 @@ if [ "$previous_commit_message" = "$current_commit_message" ]; then
     exit 1  # This will prevent the commit
 fi
 
+
 exit 0  # Allow the commit to proceed
 
