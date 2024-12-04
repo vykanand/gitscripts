@@ -9,14 +9,21 @@ if [ ! -d "./.git" ]; then
     git clone "https://github.com/vykanand/gitscripts-d2" "./"
 else
     echo "Git hooks directory found, pulling the latest changes..."
-    # Check if there's a conflicting cron-script.sh before pulling
+
+    # Temporarily stash any local changes to cron-script.sh to keep it safe
     if [ -f "./cron-script.sh" ]; then
-        echo "Found local 'cron-script.sh' file. Removing it to avoid conflicts."
-        rm -f ./cron-script.sh  # Remove conflicting local script
+        echo "Stashing local 'cron-script.sh' to avoid overwriting it"
+        git stash push --include-untracked ./cron-script.sh
     fi
 
-    # Now safely pull the latest changes
+    # Now safely pull the latest changes from the repository
     git pull origin main  # Or the appropriate branch
+
+    # If cron-script.sh was stashed, restore it after the pull
+    if [ -f "./cron-script.sh" ]; then
+        echo "Restoring local 'cron-script.sh' from stash"
+        git stash pop
+    fi
 fi
 
 # Verify the structure after pulling or cloning
